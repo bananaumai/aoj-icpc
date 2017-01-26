@@ -1,3 +1,4 @@
+-- http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1129&lang=jp
 main :: IO ()
 main = do
  s <- getContents
@@ -6,7 +7,7 @@ main = do
 solve :: [[Int]] -> [[Int]] -> [Int]
 solve ([0, 0]:_) acc = map head $ reverse acc
 solve datasets acc = solve rest (result : acc) where
-  numberOfCards = head (head datasets) 
+  numberOfCards = head (head datasets)
   numberOfConds = last (head datasets)
   cards = reverse [1..numberOfCards]
   conds = take numberOfConds $ drop 1 datasets
@@ -25,13 +26,13 @@ shuffle (cond:conds) cards = shuffle conds swapped where
   swapped = flatten . swap $ split (head cond) (last cond) cards
 
 flatten :: [[Int]] -> [Int]
-flatten ls = foldl (\acc l -> acc ++ l) [] ls
+flatten = foldl concat []
 
 swap :: [[Int]] -> [[Int]]
-swap (xs:ys:zs:[]) = [ys, xs, zs]
+swap [xs:ys:zs] = [ys, xs, zs]
 
 split :: Int -> Int -> [Int] -> [[Int]]
-split p c l = first : second : third : [] where
+split p c l = [first : second : third] where
   first = take (p-1) l
   second = take c $ drop (p-1) l
   third = drop (p+c-1) l
