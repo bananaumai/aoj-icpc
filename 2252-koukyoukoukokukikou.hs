@@ -5,12 +5,15 @@ import           Data.Maybe
 import           Data.Set      as Set
 
 data Hand = L | R deriving (Show, Eq)
+type Key = String
 
-whitchHand :: String -> Hand
-whitchHand key = if isJust (lookupIndex key leftKeys) then L else R where
-  leftKeys = fromList $ List.map (:[]) "qwertasdfgzxcvb"
+leftKeys :: Set String
+leftKeys = fromList $ List.map (:[]) "qwertasdfgzxcvb"
 
-count :: [String] -> Hand -> Int -> Int
+whitchHand :: Key -> Hand
+whitchHand k = if isJust (lookupIndex k leftKeys) then L else R
+
+count :: [Key] -> Hand -> Int -> Int
 count [] _ cnt = cnt
 count (k:ks) prevHand cnt = count ks currentHand (calc cnt)
   where
