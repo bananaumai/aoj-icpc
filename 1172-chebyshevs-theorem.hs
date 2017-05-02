@@ -1,3 +1,4 @@
+import           Control.Applicative
 import           Control.Monad
 
 main :: IO ()
@@ -8,11 +9,13 @@ main = do
     main
 
 solve :: Int -> Int
-solve n = length $ filter (>=n) $ theive (n * 2)
+solve n = let ps = thieve (n*2)
+           in length $ filter (>n) ps
 
-theive :: Int -> [Int]
-theive n = theive' [2..n] []
-  where theive' :: [Int] -> [Int] -> [Int]
-        theive' [] acc = acc
-        theive' (n:ns) acc = let acc' = n:acc
-                              in theive' (filter (\x -> x `mod` n /= 0) ns) acc'
+thieve :: Int -> [Int]
+thieve n = thieve' [2..n] []
+  where thieve' :: [Int] -> [Int] -> [Int]
+        thieve' [x] acc = x:acc
+        thieve' (x:xs) acc = if x^2 > n
+                             then acc ++ xs
+                             else thieve' (filter (\y -> y `mod` x /= 0) xs) (x:acc)
