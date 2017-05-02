@@ -1,18 +1,14 @@
 import           Control.Monad
+import           Data.List     as List
+import           Data.Set      as Set
 
 main :: IO ()
 main = do
   n <- read <$> getLine :: IO Int
   unless (n == 0) $ do
-    print $ solve n
+    print $ length $ List.filter (>=n) $ primes [2..(n*2)]
     main
 
-solve :: Int -> Int
-solve n = length $ filter (>=n) $ theive (n * 2)
-
-theive :: Int -> [Int]
-theive n = theive' [2..n] []
-  where theive' :: [Int] -> [Int] -> [Int]
-        theive' [] acc = acc
-        theive' (n:ns) acc = let acc' = n:acc
-                              in theive' (filter (\x -> x `mod` n /= 0) ns) acc'
+primes :: [Int] -> [Int]
+primes [] = []
+primes (x:xs) = x : primes [y | y <- xs, mod y x /= 0]
