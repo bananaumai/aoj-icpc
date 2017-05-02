@@ -32,7 +32,7 @@ seek m lands count
 del :: Map Coord Int -> Seq Coord -> Set Coord -> Set Coord -> Set Coord
 del _ (viewl -> EmptyL) lands _ = lands
 del m (viewl -> c@(x,y) :< q) lands deleted
-  | Set.member c deleted = del m q lands deleted
+  | Set.member c deleted = next
   | otherwise            = case Map.lookup c m of Nothing -> next
                                                   Just 0  -> next
                                                   Just 1  -> del m q' (Set.delete c lands) (Set.insert c deleted)
