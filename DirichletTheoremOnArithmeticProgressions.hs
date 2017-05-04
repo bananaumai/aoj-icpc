@@ -1,16 +1,27 @@
-import           Debug.Trace
+import           Control.Applicative
+import           Control.Monad
+import           Data.List
 
 main :: IO ()
-main = print $ solve 367 186 151
---main = print $ isPrime 73
+main = do
+  [a, d, n] <- map (read :: String -> Int) . words <$> getLine
+  unless ([a, d, n] == [0, 0, 0]) $ do
+    print $ solve a d n
+    main
+
+limit :: Int
+limit = 1000000
 
 solve :: Int -> Int -> Int -> Int
-solve a d n = filter (isPrime . fromIntegral) [a,(a+d)..] !! (n-1)
+solve a d n = [a,(a+d)..limit] `intersect` primes !! (n-1)
 
-isPrime :: Integer -> Bool
-isPrime n = isPrime' (n-1) where
-  isPrime' :: Integer -> Bool
-  isPrime' x
-    | x == 1             = trace (show n) True
-    | (x^n `mod` n) /= x = False
-    | otherwise          = isPrime' (x-1)
+primes :: [Int]
+primes = thieve limit
+
+thieve :: Int -> [Int]
+thieve n = thieve' [2..n] []
+  where thieve' :: [Int] -> [Int] -> [Int]
+        thieve' [x] acc = x:acc
+        thieve' (x:xs) acc = if x^2 > n
+                             then acc ++ xs
+                             else thieve' (filter (\y -> y `mod` x /= 0) xs) (x:acc)
